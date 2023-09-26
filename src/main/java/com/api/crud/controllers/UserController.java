@@ -3,11 +3,9 @@ package com.api.crud.controllers;
 
 import com.api.crud.models.UserModel;
 import com.api.crud.services.UserService;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.Id;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -28,12 +26,16 @@ public class UserController {
         return this.userService.saveUser(user) ;
     }
     @GetMapping(path = "/{id}")
-    public Optional<UserModel> getUSerById(@PathVariable Long id){
-        return this.userService.getById(id);
+    public Object getUSerById(@PathVariable Long id){
+        Optional<UserModel> user = this.userService.getById(id);
+        if (!user.isPresent()){
+            return "No se encontro el usuario con el id: " + id;
+        }
+        return user;
     }
 
     @PutMapping(path = "/{id}")
-    public UserModel updateUserById(@RequestBody UserModel request,long id){
+    public UserModel updateUserById(@RequestBody UserModel request,@PathVariable Long id){
         return this.userService.updateByid(request, id);
     }
 
